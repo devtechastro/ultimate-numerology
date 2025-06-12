@@ -1,0 +1,2330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Numerology Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8f4e8 0%, #fff5e6 100%);
+            min-height: 100vh;
+            color: #333;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background patterns */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(255, 183, 77, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(255, 105, 135, 0.1) 0%, transparent 50%);
+            z-index: -1;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h1 {
+            font-size: 3em;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subtitle {
+            color: #666;
+            font-size: 1.2em;
+            font-weight: 300;
+        }
+
+        /* Card Styles */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.03) 0%, transparent 70%);
+            transition: all 0.5s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .card:hover::before {
+            top: -60%;
+            right: -60%;
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .section-header h2 {
+            font-size: 2.2em;
+            color: #333;
+            font-weight: 700;
+            display: inline-block;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .section-header::before,
+        .section-header::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+        }
+
+        .section-header::before {
+            left: 0;
+        }
+
+        .section-header::after {
+            right: 0;
+        }
+
+        /* Enhanced Form Styles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            color: #555;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: color 0.3s ease;
+        }
+
+        .form-group.focused label {
+            color: #667eea;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e8e8e8;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #6366F1;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+        }
+
+        input.valid {
+            border-color: #4CAF50;
+            background: rgba(76, 175, 80, 0.05);
+        }
+
+        input.invalid {
+            border-color: #f44336;
+            background: rgba(244, 67, 54, 0.05);
+        }
+
+        .input-helper {
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            font-size: 0.85em;
+            color: #666;
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        .form-group:hover .input-helper,
+        .form-group.focused .input-helper {
+            opacity: 1;
+        }
+
+        .input-helper.error {
+            color: #f44336;
+        }
+
+        .input-helper.success {
+            color: #4CAF50;
+        }
+
+        .datetime-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* Floating Label Effect */
+        .form-group.floating-label {
+            position: relative;
+            padding-top: 20px;
+        }
+
+        .form-group.floating-label label {
+            position: absolute;
+            top: 35px;
+            left: 20px;
+            background: white;
+            padding: 0 8px;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            font-size: 16px;
+            font-weight: 400;
+            text-transform: none;
+            letter-spacing: normal;
+            color: #999;
+        }
+
+        .form-group.floating-label input:focus+label,
+        .form-group.floating-label input:not(:placeholder-shown)+label,
+        .form-group.floating-label.has-value label {
+            top: 10px;
+            font-size: 0.85em;
+            color: #667eea;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Progress Indicator */
+        .form-progress {
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #e8e8e8;
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 100px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100px);
+            }
+
+            100% {
+                transform: translateX(100px);
+            }
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        /* Input Icons */
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+
+        .form-group.focused .input-icon {
+            color: #667eea;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* Time Input Enhancement */
+        .time-input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fafafa;
+            padding: 10px;
+            border-radius: 12px;
+            border: 2px solid #e8e8e8;
+            transition: all 0.3s ease;
+        }
+
+        .time-input-group:focus-within {
+            border-color: #6366F1;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .time-input-group input {
+            border: none;
+            background: transparent;
+            padding: 5px;
+            text-align: center;
+            width: 60px;
+        }
+
+        .time-input-group input:focus {
+            box-shadow: none;
+            transform: none;
+        }
+
+        .time-separator {
+            font-size: 1.5em;
+            color: #999;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #333;
+        }
+
+        .form-group:hover .tooltip {
+            opacity: 1;
+        }
+
+        /* Button Styles */
+        .generate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .generate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .generate-btn:hover::before {
+            left: 100%;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(99, 102, 241, 0.45);
+        }
+
+        /* Results Section */
+        .results-container {
+            display: none;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* Main Info Cards */
+        .main-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .info-card-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .info-card-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-card-value {
+            font-size: 2em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Grid Styles */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+
+        .grid-card {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .grid-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .grid-card h3 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 1.5em;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .grid-cell {
+            background: #f8f8f8;
+            border: none;
+            padding: 20px;
+            text-align: center;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-height: 110px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .grid-cell:hover {
+            transform: scale(1.08);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .grid-cell .number {
+            font-size: 2.2em;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .grid-cell .description {
+            font-size: 0.75em;
+            font-weight: 500;
+            line-height: 1.3;
+            opacity: 0.8;
+        }
+
+        .grid-cell.inactive {
+            background: #f8f8f8;
+            color: #d0d0d0;
+        }
+
+        .grid-cell.inactive .number {
+            color: #e0e0e0;
+        }
+
+        .grid-cell.inactive .description {
+            opacity: 0.4;
+        }
+
+        /* Updated Cell color themes */
+        .grid-cell.purple {
+            background: linear-gradient(135deg, #e8e5ff 0%, #d4ceff 100%);
+            color: #6b5b95;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .grid-cell.pink {
+            background: linear-gradient(135deg, #ffe5e9 0%, #ffd0d6 100%);
+            color: #d64570;
+            animation: pulse 2s ease-in-out infinite 0.2s;
+        }
+
+        .grid-cell.orange {
+            background: linear-gradient(135deg, #fff0e5 0%, #ffe0cc 100%);
+            color: #e27300;
+            animation: pulse 2s ease-in-out infinite 0.4s;
+        }
+
+        .grid-cell.blue {
+            background: linear-gradient(135deg, #e5f3ff 0%, #cce7ff 100%);
+            color: #0066cc;
+            animation: pulse 2s ease-in-out infinite 0.6s;
+        }
+
+        .grid-cell.green {
+            background: linear-gradient(135deg, #e5ffe5 0%, #ccffcc 100%);
+            color: #00a652;
+            animation: pulse 2s ease-in-out infinite 0.8s;
+        }
+
+        .grid-cell.teal {
+            background: linear-gradient(135deg, #e5fff5 0%, #ccffe8 100%);
+            color: #00a67e;
+            animation: pulse 2s ease-in-out infinite 1s;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+        /* Plane Strength */
+        .plane-strength {
+            display: grid;
+            gap: 15px;
+        }
+
+        .plane-item {
+            background: linear-gradient(135deg, #f8f4e8 0%, #fff5e6 100%);
+            padding: 18px 25px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .plane-item:hover {
+            background: linear-gradient(135deg, #f0e8d8 0%, #f5e5d6 100%);
+            transform: translateX(8px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .plane-name {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .plane-value {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        /* Predictions Card */
+        .predictions-card {
+            background: white;
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .predictions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .prediction-item {
+            background: linear-gradient(135deg, #f8f4e8 0%, #fff5e6 100%);
+            padding: 25px;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .prediction-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .prediction-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .prediction-value {
+            color: #333;
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        /* Lucky Elements */
+        .lucky-elements {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .color-badge {
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .color-badge:hover {
+            transform: scale(1.1) translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Effects Section */
+        .effects-box {
+            background: linear-gradient(135deg, #f8f4e8 0%, #fff5e6 100%);
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 25px;
+            min-height: 130px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .effects-box:hover {
+            background: linear-gradient(135deg, #f0e8d8 0%, #f5e5d6 100%);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .effects-title {
+            color: #333;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .effects-content {
+            color: #666;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+
+        .effects-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .effects-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .effects-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* Kua Direction Card */
+        .kua-directions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .kua-item {
+            background: linear-gradient(135deg, #f8f4e8 0%, #fff5e6 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .kua-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .kua-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .kua-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .kua-value {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #333;
+        }
+
+        /* Characteristics Section */
+        .characteristics-list {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .characteristic-item {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid;
+            border-image: linear-gradient(135deg, #667eea, #764ba2) 1;
+            transition: all 0.3s ease;
+        }
+
+        .characteristic-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Product Recommendations */
+        .recommendations-section {
+            margin-top: 60px;
+            padding: 40px 0;
+        }
+
+        .recommendations-title {
+            text-align: center;
+            font-size: 2.2em;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .recommendations-subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 50px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 30px;
+        }
+
+        .product-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .product-description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .product-price {
+            font-size: 1.8em;
+            color: #667eea;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .buy-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .buy-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            margin-top: 60px;
+            padding: 60px 0;
+            background: linear-gradient(135deg, #4A352B 0%, #4A352B 100%);
+            border-radius: 30px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .cta-subtitle {
+            font-size: 1.3em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 18px 50px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+            background: #f8f8f8;
+        }
+
+        /* Career List */
+        .career-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .career-item {
+            background: linear-gradient(135deg, #f8f4e8 0%, #fff5e6 100%);
+            padding: 15px 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            font-weight: 500;
+        }
+
+        .career-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        /* Loader */
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 50px;
+        }
+
+        .loader-spinner {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(99, 102, 241, 0.1);
+            border-radius: 50%;
+            border-top-color: #6366F1;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loader-text {
+            color: #666;
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+
+        /* Error Message */
+        .error-message {
+            background: linear-gradient(135deg, #fee 0%, #fdd 100%);
+            color: #d33;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 25px;
+            display: none;
+            text-align: center;
+            border: 1px solid #fcc;
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 2.2em;
+            }
+
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+
+            .predictions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .cta-title {
+                font-size: 2em;
+            }
+
+            .main-info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Parallax effect for numbers */
+        .parallax-number {
+            transition: transform 0.3s ease;
+        }
+
+        .parallax-number:hover {
+            transform: translateY(-10px) scale(1.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✨ Ultimate Numerology Calculator ✨</h1>
+            <p class="subtitle">Unlock the mysteries of your destiny through the power of numbers</p>
+        </div>
+
+        <div class="card">
+            <h2 style="color: #333; margin-bottom: 20px; font-weight: 600; text-align: center;">Enter Your Details</h2>
+
+            <!-- Progress Bar -->
+            <div class="form-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">Complete all fields to reveal your fortune</div>
+            </div>
+
+            <form id="numerologyForm" novalidate>
+                <div class="form-grid">
+                    <div class="form-group ">
+                        <label>Name</label>
+                        <div class="input-with-icon">
+                            <input type="text" id="name" name="name" placeholder="Name" required
+                                pattern="[A-Za-z\s]{2,50}"
+                                title="Please enter a valid name (2-50 characters, letters only)">
+                            <!-- <label for="name">Full Name</label> -->
+                            <span class="input-icon">👤</span>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group ">
+                        <label>Date Of Birth</label>
+                        <div class="input-with-icon">
+                            <input type="date" id="dob" name="dob" placeholder=" " required
+                                max="${new Date().toISOString().split('T')[0]}" min="1900-01-01">
+                            <!-- <label for="dob">Date of Birth</label> -->
+                            <span class="input-icon">📅</span>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <div class="input-with-icon">
+                            <input type="tel" id="mobile" name="mobile" placeholder="Phone Number" required
+                                pattern="[0-9]{10}" maxlength="10" title="Please enter a valid 10-digit mobile number">
+                            <!-- <label for="mobile">Mobile Number</label> -->
+                            <span class="input-icon">📱</span>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group ">
+                        <label>Email</label>
+                        <div class="input-with-icon">
+                            <input type="email" id="email" name="email" placeholder="Email" required
+                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                title="Please enter a valid email address">
+                            <!-- <label for="email">Email Address</label> -->
+                            <span class="input-icon">✉️</span>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group ">
+                        <label>Place of Birth</label>
+                        <div class="input-with-icon">
+                            <input type="text" id="pob" name="pob" placeholder="Place Of birth" required
+                                pattern=".{3,100}" title="Please enter your place of birth">
+                            <!-- <label for="pob">Place of Birth</label> -->
+                            <span class="input-icon">📍</span>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>Time of Birth</label>
+                        <div class="time-input-group">
+                            <input type="number" id="hour" name="hour" min="0" max="23" placeholder="HH" required
+                                title="Hour (0-23 format)">
+                            <span class="time-separator">:</span>
+                            <input type="number" id="minute" name="minute" min="0" max="59" placeholder="MM" required
+                                title="Minutes (0-59)">
+                        </div>
+
+                    </div>
+
+                    <div class="form-group ">
+                        <label>Gender</label>
+                        <div class="input-with-icon">
+                            <select id="gender" name="gender" required>
+                                <option value="" disabled selected>Select Gender</option>
+                                <option value="male">Male ♂️</option>
+                                <option value="female">Female ♀️</option>
+                                <option value="other">Other ⚧️</option>
+                            </select>
+                            <!-- <label for="gender" style="position: static; margin-bottom: 10px;">Gender</label> -->
+                            <span class="input-icon">⚧️</span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <p style="color: #666; font-size: 0.9em; margin-bottom: 20px;">
+                        🔒 Your data is secure and used only for calculations
+                    </p>
+                </div>
+
+                <button type="submit" class="generate-btn" id="submitBtn">
+                    <span id="btnText">Reveal Your Fortune ✨</span>
+                    <span id="btnLoader" style="display: none;">Calculating... 🌟</span>
+                </button>
+            </form>
+
+            <div class="loader" id="loader">
+                <div class="loader-spinner"></div>
+                <p class="loader-text">Unlocking your cosmic blueprint...</p>
+            </div>
+
+            <div class="error-message"></div>
+        </div>
+
+        <div class="results-container" id="results">
+            <!-- Main Info Cards -->
+            <div class="main-info-grid fade-in">
+                <div class="info-card">
+                    <div class="info-card-icon">🌟</div>
+                    <div class="info-card-label">Mulank</div>
+                    <div class="info-card-value parallax-number" id="mulankDisplay">-</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">🎯</div>
+                    <div class="info-card-label">Bhagyank</div>
+                    <div class="info-card-value parallax-number" id="bhagyankDisplay">-</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">🍀</div>
+                    <div class="info-card-label">Luck</div>
+                    <div class="info-card-value parallax-number" id="luckDisplay">-</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">♌</div>
+                    <div class="info-card-label">Sun Sign</div>
+                    <div class="info-card-value" id="sunSignDisplay">-</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">📅</div>
+                    <div class="info-card-label">Personal Year</div>
+                    <div class="info-card-value parallax-number" id="personalYearDisplay">-</div>
+                </div>
+            </div>
+
+            <!-- Lucky Colors Section -->
+            <div class="card fade-in" style="margin-bottom: 35px;">
+                <div class="section-header">
+                    <h2>🌈 Your Lucky Elements</h2>
+                </div>
+
+                <div style="display: grid; gap: 25px;">
+                    <div>
+                        <h3 style="color: #333; margin-bottom: 20px; font-weight: 600; text-align: center;">Lucky Colors
+                        </h3>
+                        <div class="lucky-elements" id="luckyColors"></div>
+                    </div>
+
+                    <div
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
+                        <div class="prediction-item" style="text-align: center;">
+                            <div class="prediction-label">Lucky Element</div>
+                            <div class="prediction-value" id="luckyElement">--</div>
+                        </div>
+                        <div class="prediction-item" style="text-align: center;">
+                            <div class="prediction-label">Unlucky Colors</div>
+                            <div class="prediction-value" id="unluckyColor">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid Cards -->
+            <div class="grid-container">
+                <!-- Lo-Shu Grid -->
+                <div class="grid-card fade-in">
+                    <h3>Lo-Shu Grid</h3>
+                    <div class="number-grid" id="loshuGrid">
+                        <div class="grid-cell">
+                            <div class="number">4</div>
+                            <div class="description">Money &<br>Property</div>
+                        </div>
+                        <div class="grid-cell">
+                            <div class="number">9</div>
+                            <div class="description">Reputation &<br>Fame</div>
+                        </div>
+                        <div class="grid-cell">
+                            <div class="number">2</div>
+                            <div class="description">Marriage &<br>Relationship</div>
+                        </div>
+                        <div class="grid-cell">
+                            <div class="number">3</div>
+                            <div class="description">Health &<br>Family</div>
+                        </div>
+                        <div class="grid-cell">
+                            <div class="number">5</div>
+                            <div class="description">Energy &<br>Stability</div>
+                        </div>
+                        <div class="grid-cell">
+                            <div class="number">7</div>
+                            <div class="description">Children &<br>Creativity</div>
+                        </div>
+                        <div class="grid-cell">
+                            <div class="number">8</div>
+                            <div class="description">Knowledge &<br>Intuition</div>
+                        </div>
+                        <div class="grid-cell">
+                            <div class="number">1</div>
+                            <div class="description">Career &<br>Success</div>
+                        </div>
+                        <div class="grid-cell">
+                            <div class="number">6</div>
+                            <div class="description">Friends &<br>Beginnings</div>
+                        </div>
+                    </div>
+
+                    <h4 style="color: #333; margin-bottom: 20px; font-weight: 600;">Plane Strength Analysis</h4>
+                    <div class="plane-strength" id="loshuPlanes"></div>
+
+                    <div class="effects-box">
+                        <div class="effects-title">✨ Mulank Effects</div>
+                        <div class="effects-content">
+                            <ul class="effects-list" id="mulankEffects"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Predictive Grid -->
+                <div class="grid-card fade-in">
+                    <h3>Predictive Grid</h3>
+                    <div class="number-grid" id="predictiveGrid">
+                        <div class="grid-cell">
+                            <div class="number">3</div>
+                            <div class="description">Expression &<br>Creativity</div>
+                        </div>
+                        <div class="grid-cell">
+                            <div class="number">1</div>
+                            <div class="description">Leadership &<br>Independence</div>
+                        </div>
+                        <div class="grid-cell">
+                            <div class="number">9</div>
+                            <div class="description">Wisdom &<br>Humanity</div>
+                        </div>
+                        <div class="grid-cell">
+                            <div class="number">6</div>
+                            <div class="description">Nurturing &<br>Responsibility</div>
+                        </div>
+                        <div class="grid-cell">
+                            <div class="number">7</div>
+                            <div class="description">Spirituality &<br>Introspection</div>
+                        </div>
+                        <div class="grid-cell">
+                            <div class="number">5</div>
+                            <div class="description">Freedom &<br>Adventure</div>
+                        </div>
+                        <div class="grid-cell">
+                            <div class="number">2</div>
+                            <div class="description">Cooperation &<br>Balance</div>
+                        </div>
+                        <div class="grid-cell">
+                            <div class="number">8</div>
+                            <div class="description">Authority &<br>Material</div>
+                        </div>
+                        <div class="grid-cell">
+                            <div class="number">4</div>
+                            <div class="description">Stability &<br>Process</div>
+                        </div>
+                    </div>
+
+                    <h4 style="color: #333; margin-bottom: 20px; font-weight: 600;">Plane Strength Analysis</h4>
+                    <div class="plane-strength" id="predictivePlanes"></div>
+
+                    <div class="effects-box">
+                        <div class="effects-title">✨ Bhagyank Effects</div>
+                        <div class="effects-content">
+                            <ul class="effects-list" id="bhagyankEffects"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kua Direction Card -->
+            <div class="card fade-in">
+                <div class="section-header">
+                    <h2>🧭 Your Kua Directions</h2>
+                </div>
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <span style="font-size: 1.2em; color: #666;">Kua Number:</span>
+                    <span style="font-size: 2em; font-weight: 700; color: #667eea; margin-left: 10px;"
+                        id="kuaNumber">-</span>
+                </div>
+                <div class="kua-directions" id="kuaDirections"></div>
+            </div>
+
+            <!-- Detailed Predictions -->
+            <div class="predictions-card fade-in">
+                <div class="section-header">
+                    <h2>📊 Your Complete Numerology Report</h2>
+                </div>
+                <div class="predictions-grid" id="predictions">
+                    <div class="prediction-item">
+                        <div class="prediction-label">Name Number</div>
+                        <div class="prediction-value" id="nameNumber">--</div>
+                    </div>
+                    <div class="prediction-item">
+                        <div class="prediction-label">Success Number</div>
+                        <div class="prediction-value" id="successNumber">--</div>
+                    </div>
+                    <div class="prediction-item">
+                        <div class="prediction-label">Soul Urge Number</div>
+                        <div class="prediction-value" id="soulUrgeNumber">--</div>
+                    </div>
+                    <div class="prediction-item">
+                        <div class="prediction-label">Personality Number</div>
+                        <div class="prediction-value" id="personalityNumber">--</div>
+                    </div>
+                    <div class="prediction-item">
+                        <div class="prediction-label">Maturity Number</div>
+                        <div class="prediction-value" id="maturityNumber">--</div>
+                    </div>
+                    <div class="prediction-item">
+                        <div class="prediction-label">Age (Years)</div>
+                        <div class="prediction-value" id="ageYears">--</div>
+                    </div>
+                    <div class="prediction-item">
+                        <div class="prediction-label">Friendly Numbers</div>
+                        <div class="prediction-value" id="friendlyNumbers">--</div>
+                    </div>
+                    <div class="prediction-item">
+                        <div class="prediction-label">Enemy Numbers</div>
+                        <div class="prediction-value" id="enemyNumbers">--</div>
+                    </div>
+                    <div class="prediction-item">
+                        <div class="prediction-label">Neutral Numbers</div>
+                        <div class="prediction-value" id="neutralNumbers">--</div>
+                    </div>
+                    <div class="prediction-item">
+                        <div class="prediction-label">Missing Numbers</div>
+                        <div class="prediction-value" id="missingNumbers">--</div>
+                    </div>
+                    <div class="prediction-item">
+                        <div class="prediction-label">Ruling Planet (Mulank)</div>
+                        <div class="prediction-value" id="rulingMulank">--</div>
+                    </div>
+                    <div class="prediction-item">
+                        <div class="prediction-label">Ruling Planet (Bhagyank)</div>
+                        <div class="prediction-value" id="rulingBhagyank">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dasha Section -->
+            <div class="card fade-in">
+                <div class="section-header">
+                    <h2>🪐 Your Planetary Periods (Dasha)</h2>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div class="prediction-item" style="text-align: center;">
+                        <div class="prediction-label">Maha-Dasha</div>
+                        <div class="prediction-value" id="mahaDasha">--</div>
+                    </div>
+                    <div class="prediction-item" style="text-align: center;">
+                        <div class="prediction-label">Antar-Dasha</div>
+                        <div class="prediction-value" id="antarDasha">--</div>
+                    </div>
+                    <div class="prediction-item" style="text-align: center;">
+                        <div class="prediction-label">Pratyantar-Dasha</div>
+                        <div class="prediction-value" id="pratyantarDasha">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Characteristics Section -->
+            <div class="card fade-in">
+                <div class="section-header">
+                    <h2>🌟 Your Characteristics</h2>
+                </div>
+                <div class="characteristics-list" id="characteristics"></div>
+
+                <div class="effects-box" style="margin-top: 30px;">
+                    <div class="effects-title">🎯 Maturity Number Interpretation</div>
+                    <div class="effects-content" id="maturityInterpretation">
+                        Your maturity insights will appear here...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Career Section -->
+            <div class="card fade-in">
+                <div class="section-header">
+                    <h2>💼 Recommended Career Paths</h2>
+                </div>
+                <div class="career-grid" id="careerPaths"></div>
+            </div>
+
+            <!-- Product Recommendations Section -->
+            <div class="recommendations-section fade-in">
+
+                <h2 class="recommendations-title">🔮 Recommended for Your Fortune</h2>
+                <p class="recommendations-subtitle">Enhance your luck with these specially selected items based on your
+                    numerology</p>
+
+                <div class="products-grid" id="productsGrid">
+                    <!-- Products will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section fade-in">
+                <div class="cta-content">
+                    <h2 class="cta-title">🌟 Get Your Complete Fortune Report</h2>
+                    <p class="cta-subtitle">Unlock detailed predictions for love, career, health, and wealth</p>
+
+
+
+                    <a href="https://astroarunpandit.org/fortune-report-plus/?utm_source=numerology&utm_medium=occult&utm_campaign=website"
+                        class="cta-button">Get Full Report Now →</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.addEventListener('DOMContentLoaded', () => {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach(el => observer.observe(el));
+        });
+
+        // Form validation and enhancements
+        const form = document.getElementById('numerologyForm');
+        const inputs = form.querySelectorAll('input, select');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Validation patterns
+        const validationRules = {
+            name: {
+                pattern: /^[A-Za-z\s]{2,50}$/,
+                message: 'Name must be 2-50 characters, letters only'
+            },
+            email: {
+                pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
+                message: 'Please enter a valid email address'
+            },
+            mobile: {
+                pattern: /^[0-9]{10}$/,
+                message: 'Mobile number must be exactly 10 digits'
+            },
+            pob: {
+                pattern: /.{3,100}/,
+                message: 'Place of birth must be at least 3 characters'
+            }
+        };
+
+        // Real-time validation
+        function validateInput(input) {
+            const rule = validationRules[input.name];
+
+            if (input.value === '') {
+                input.classList.remove('valid', 'invalid');
+                return false;
+            }
+
+            let isValid = true;
+
+            if (rule && rule.pattern) {
+                isValid = rule.pattern.test(input.value);
+            } else if (input.type === 'date') {
+                const date = new Date(input.value);
+                const today = new Date();
+                isValid = date <= today && date >= new Date('1900-01-01');
+            } else if (input.type === 'number') {
+                const num = parseInt(input.value);
+                const min = parseInt(input.min);
+                const max = parseInt(input.max);
+                isValid = !isNaN(num) && num >= min && num <= max;
+            } else if (input.tagName === 'SELECT') {
+                isValid = input.value !== '';
+            }
+
+            if (isValid) {
+                input.classList.remove('invalid');
+                input.classList.add('valid');
+                const helper = input.closest('.form-group').querySelector('.input-helper');
+                if (helper) {
+                    helper.classList.remove('error');
+                    helper.classList.add('success');
+                }
+            } else {
+                input.classList.remove('valid');
+                input.classList.add('invalid');
+                const helper = input.closest('.form-group').querySelector('.input-helper');
+                if (helper && rule) {
+                    helper.textContent = rule.message;
+                    helper.classList.add('error');
+                    helper.classList.remove('success');
+                }
+            }
+
+            updateProgress();
+            return isValid;
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const totalFields = inputs.length;
+            let filledFields = 0;
+            let validFields = 0;
+
+            inputs.forEach(input => {
+                if (input.value !== '') {
+                    filledFields++;
+                    if (input.classList.contains('valid') || (!input.classList.contains('invalid') && input.value)) {
+                        validFields++;
+                    }
+                }
+            });
+
+            const progress = (validFields / totalFields) * 100;
+            progressFill.style.width = progress + '%';
+
+            if (progress === 0) {
+                progressText.textContent = 'Complete all fields to reveal your fortune';
+            } else if (progress < 50) {
+                progressText.textContent = `${Math.round(progress)}% complete - Keep going! 💪`;
+            } else if (progress < 100) {
+                progressText.textContent = `${Math.round(progress)}% complete - Almost there! 🎯`;
+            } else {
+                progressText.textContent = 'All set! Click to reveal your fortune! 🌟';
+                submitBtn.style.animation = 'pulse 1.5s infinite';
+            }
+        }
+
+        // Add event listeners
+        inputs.forEach(input => {
+            // Focus effects
+            input.addEventListener('focus', function () {
+                this.closest('.form-group').classList.add('focused');
+            });
+
+            input.addEventListener('blur', function () {
+                this.closest('.form-group').classList.remove('focused');
+                validateInput(this);
+            });
+
+            // Real-time validation
+            input.addEventListener('input', function () {
+                if (this.value !== '') {
+                    validateInput(this);
+                }
+
+                // Add floating label class
+                const formGroup = this.closest('.form-group');
+                if (formGroup.classList.contains('floating-label')) {
+                    if (this.value !== '') {
+                        formGroup.classList.add('has-value');
+                    } else {
+                        formGroup.classList.remove('has-value');
+                    }
+                }
+            });
+
+            // Mobile number formatting
+            if (input.name === 'mobile') {
+                input.addEventListener('input', function (e) {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length > 10) {
+                        value = value.slice(0, 10);
+                    }
+                    e.target.value = value;
+                });
+            }
+
+            // Time input formatting
+            if (input.name === 'hour' || input.name === 'minute') {
+                input.addEventListener('input', function (e) {
+                    let value = parseInt(e.target.value);
+                    const max = parseInt(e.target.max);
+                    if (value > max) {
+                        e.target.value = max;
+                    }
+                    if (e.target.value.length > 2) {
+                        e.target.value = e.target.value.slice(0, 2);
+                    }
+                });
+            }
+        });
+
+        // Form submission with validation
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Validate all fields
+            let isFormValid = true;
+            inputs.forEach(input => {
+                if (!validateInput(input)) {
+                    isFormValid = false;
+                }
+            });
+
+            if (!isFormValid) {
+                // Shake animation on button
+                submitBtn.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    submitBtn.style.animation = '';
+                }, 500);
+
+                // Show error message
+                const errorMsg = document.querySelector('.error-message');
+                errorMsg.textContent = 'Please fill all fields correctly before proceeding.';
+                errorMsg.style.display = 'block';
+                setTimeout(() => {
+                    errorMsg.style.display = 'none';
+                }, 3000);
+                return;
+            }
+
+            // Show loading state
+            document.getElementById('btnText').style.display = 'none';
+            document.getElementById('btnLoader').style.display = 'inline';
+            submitBtn.disabled = true;
+
+            const loader = document.getElementById('loader');
+            const results = document.getElementById('results');
+            const errorMsg = document.querySelector('.error-message');
+
+            // Hide previous results and errors
+            results.style.display = 'none';
+            errorMsg.style.display = 'none';
+
+            // Show loader after button animation
+            setTimeout(() => {
+                loader.style.display = 'block';
+            }, 300);
+
+            // Get form data
+            const formData = new FormData(e.target);
+            const dob = new Date(formData.get('dob'));
+
+            const params = {
+                year: dob.getFullYear(),
+                month: dob.getMonth() + 1,
+                day: dob.getDate(),
+                hour: parseInt(formData.get('hour')),
+                minute: parseInt(formData.get('minute')),
+                mobile: formData.get('mobile'),
+                email: formData.get('email'),
+                name: formData.get('name'),
+                gender: formData.get("gender"),
+                country_code: '91',
+                place_of_birth: formData.get('pob')
+            };
+
+            // Build URL with query parameters
+            const queryString = new URLSearchParams(params).toString();
+            const apiUrl = `https://kundali.astroarunpandit.org/api/get-ultimate-numerology?${queryString}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6ImFhcC0wMDEtMTcwMzIwMjUiLCJlbnYiOiJwcm9kdWN0aW9uIiwidHlwZSI6InBlcm1hbmVudF9hY2Nlc3MiLCJ2ZXJzaW9uIjoiMS4wIiwiaXNzdWVkQXQiOiIyMDI1LTAzLTE3VDA2OjAyOjE1LjUwOVoiLCJpYXQiOjE3NDIxOTEzMzV9.XotwjWoKglVFW25gEirkOwB3ZZTpxngxhunpmok3hPM',
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
+
+                const data = await response.json();
+
+                // Update results
+                updateResults(data);
+                // Show results with animation
+                setTimeout(() => {
+                    loader.style.setProperty('display', 'none', 'important');
+
+                }, 500)
+                results.style.display = 'block';
+
+                // Reset button state
+                document.getElementById('btnText').style.display = 'inline';
+                document.getElementById('btnLoader').style.display = 'none';
+                submitBtn.disabled = false;
+
+                // Scroll to results
+                setTimeout(() => {
+                    results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+
+            } catch (error) {
+                console.error('Error:', error);
+                loader.style.setProperty('display', 'none', 'important');
+
+                errorMsg.textContent = 'An error occurred while fetching your numerology data. Please try again.';
+                errorMsg.style.display = 'block';
+
+                // Reset button state
+                document.getElementById('btnText').style.display = 'inline';
+                document.getElementById('btnLoader').style.display = 'none';
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Add shake animation
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        function updateResults(data) {
+            const result = data.result || data;
+
+            // Update main display cards
+            document.getElementById('mulankDisplay').textContent = result.mulank || '-';
+            document.getElementById('bhagyankDisplay').textContent = result.bhagyank || '-';
+            document.getElementById('luckDisplay').textContent = result.lucky_percentage ? result.lucky_percentage + '%' : '-';
+            document.getElementById('sunSignDisplay').textContent = result.sun_sign || '-';
+            document.getElementById('personalYearDisplay').textContent = result.personalYear || '-';
+
+            // Handle lucky colors with badges
+            if (result.lucky_color && result.lucky_color.colors) {
+                const luckyColorsContainer = document.getElementById('luckyColors');
+                luckyColorsContainer.innerHTML = '';
+
+                result.lucky_color.colors.forEach((color, index) => {
+                    const badge = document.createElement('div');
+                    badge.className = 'color-badge';
+                    badge.textContent = color;
+                    badge.style.background = getColorCode(color);
+                    badge.style.animationDelay = `${index * 0.1}s`;
+                    luckyColorsContainer.appendChild(badge);
+                });
+            }
+
+            // Update lucky element
+            document.getElementById('luckyElement').textContent = result.lucky_element || '--';
+
+            // Handle unlucky colors
+            if (result.unlucky_colors && result.unlucky_colors.unluckyColors) {
+                document.getElementById('unluckyColor').textContent = result.unlucky_colors.unluckyColors.join(', ');
+            }
+
+            // Update other fields
+            document.getElementById('nameNumber').textContent = result.name_number || '--';
+            document.getElementById('successNumber').textContent = result.success_number || '--';
+            document.getElementById('soulUrgeNumber').textContent = result.soulUrgeNumber || '--';
+            document.getElementById('personalityNumber').textContent = result.personalityNumber || '--';
+            document.getElementById('maturityNumber').textContent = result.maturity_number || '--';
+            document.getElementById('ageYears').textContent = result.age_in_year ? result.age_in_year + ' years' : '--';
+
+            // Handle arrays
+            document.getElementById('friendlyNumbers').textContent = result.friendly_number ? result.friendly_number.join(', ') : '--';
+            document.getElementById('enemyNumbers').textContent = result.enemy_number ? result.enemy_number.join(', ') : '--';
+            document.getElementById('neutralNumbers').textContent = result.neutral_number ? result.neutral_number.join(', ') : '--';
+            document.getElementById('missingNumbers').textContent = result.missing_number ? result.missing_number.join(', ') : '--';
+
+            // Update ruling planets
+            document.getElementById('rulingMulank').textContent = result.ruling_mulank || '--';
+            document.getElementById('rulingBhagyank').textContent = result.ruling_bhagyank || '--';
+
+            // Handle dasha data
+            if (result.dasha) {
+                document.getElementById('mahaDasha').textContent = result.dasha.maha_dasha ?
+                    `${result.dasha.maha_dasha.planet} (${result.dasha.maha_dasha.number})` : '--';
+                document.getElementById('antarDasha').textContent = result.dasha.antar_dasha ?
+                    `${result.dasha.antar_dasha.planet} (${result.dasha.antar_dasha.number})` : '--';
+                document.getElementById('pratyantarDasha').textContent = result.dasha.pratantar_dasha ?
+                    `${result.dasha.pratantar_dasha.planet} (${result.dasha.pratantar_dasha.number})` : '--';
+            }
+
+            // Update Kua number and directions
+            document.getElementById('kuaNumber').textContent = result.kua_no || '-';
+            if (result.kua_direction) {
+                updateKuaDirections(result.kua_direction);
+            }
+
+            // Update effects
+            if (result.effect_of_mulank) {
+                updateEffectsList('mulankEffects', result.effect_of_mulank);
+            }
+            if (result.effect_of_bhagyank) {
+                updateEffectsList('bhagyankEffects', result.effect_of_bhagyank);
+            }
+
+            // Update grids
+            if (result.lhoshogrid) {
+                updateLoshuGrid(result.lhoshogrid);
+                updatePlaneStrengths('loshu', result.lhoshogrid.plane_strength);
+            }
+            if (result.predictive_grid) {
+                updatePredictiveGrid(result.predictive_grid);
+                updatePlaneStrengths('predictive', result.predictive_grid.plane_strength);
+            }
+
+            // Update characteristics
+            if (result.first_letter_characteristics) {
+                updateCharacteristics(result.first_letter_characteristics);
+            }
+
+            // Update maturity interpretation
+            if (result.maturity_no_interpretation) {
+                document.getElementById('maturityInterpretation').textContent =
+                    result.maturity_no_interpretation.description || 'Your maturity insights will appear here...';
+            }
+
+            // Update career paths
+            if (result.bhagyank_carrer && result.bhagyank_carrer.careers) {
+                updateCareerPaths(result.bhagyank_carrer.careers);
+            }
+
+            // Update product recommendations
+            updateProductRecommendations(result);
+        }
+
+        function getColorCode(colorName) {
+            const colors = {
+                'Gold': 'linear-gradient(135deg, #FFD700, #FFA500)',
+                'Orange': 'linear-gradient(135deg, #FFA500, #FF8C00)',
+                'Yellow': 'linear-gradient(135deg, #FFEB3B, #FFC107)',
+                'Red': 'linear-gradient(135deg, #FF5252, #F44336)',
+                'Blue': 'linear-gradient(135deg, #2196F3, #1976D2)',
+                'Black': 'linear-gradient(135deg, #424242, #212121)',
+                'Green': 'linear-gradient(135deg, #4CAF50, #388E3C)',
+                'Purple': 'linear-gradient(135deg, #9C27B0, #7B1FA2)',
+                'Pink': 'linear-gradient(135deg, #E91E63, #C2185B)',
+                'White': 'linear-gradient(135deg, #FFFFFF, #F5F5F5)'
+            };
+            return colors[colorName] || 'linear-gradient(135deg, #667eea, #764ba2)';
+        }
+
+        function updateKuaDirections(directions) {
+            const container = document.getElementById('kuaDirections');
+            container.innerHTML = '';
+
+            const directionIcons = {
+                'moneyAndProsperity': '💰',
+                'health': '❤️',
+                'relationships': '💑',
+                'personalityDevelopmentAndGrowth': '🌱'
+            };
+
+            const directionLabels = {
+                'moneyAndProsperity': 'Money & Prosperity',
+                'health': 'Health',
+                'relationships': 'Relationships',
+                'personalityDevelopmentAndGrowth': 'Personal Growth'
+            };
+
+            for (const [key, value] of Object.entries(directions)) {
+                const item = document.createElement('div');
+                item.className = 'kua-item';
+                item.innerHTML = `
+                    <div class="kua-icon">${directionIcons[key] || '🧭'}</div>
+                    <div class="kua-label">${directionLabels[key] || key}</div>
+                    <div class="kua-value">${value}</div>
+                `;
+                container.appendChild(item);
+            }
+        }
+
+        function updateEffectsList(elementId, effects) {
+            const list = document.getElementById(elementId);
+            list.innerHTML = '';
+
+            effects.forEach(effect => {
+                const li = document.createElement('li');
+                li.textContent = effect;
+                list.appendChild(li);
+            });
+        }
+
+        function updateCharacteristics(characteristics) {
+            const container = document.getElementById('characteristics');
+            container.innerHTML = '';
+
+            for (const [key, value] of Object.entries(characteristics)) {
+                const item = document.createElement('div');
+                item.className = 'characteristic-item';
+                item.textContent = value;
+                container.appendChild(item);
+            }
+        }
+
+        function updateCareerPaths(careers) {
+            const container = document.getElementById('careerPaths');
+            container.innerHTML = '';
+
+            careers.forEach(career => {
+                const item = document.createElement('div');
+                item.className = 'career-item';
+                item.textContent = career;
+                container.appendChild(item);
+            });
+        }
+
+        function updateProductRecommendations(result) {
+            const container = document.getElementById('productsGrid');
+            container.innerHTML = '';
+
+            // Add Rudraksha
+            if (result.lucky_rudraksha) {
+                const rudraksha = result.lucky_rudraksha;
+                const card = createProductCard(
+                    rudraksha.imageLink,
+                    rudraksha.rudraksha + ' Rudraksha',
+                    rudraksha.description,
+                    'Special Price',
+                    rudraksha.productLink
+                );
+                container.appendChild(card);
+            }
+
+            // Add Bracelet
+            if (result.lucky_bracelet) {
+                const bracelet = result.lucky_bracelet;
+                const card = createProductCard(
+                    bracelet.imageLink,
+                    bracelet.braceletName,
+                    bracelet.description,
+                    'Special Price',
+                    bracelet.productLink
+                );
+                container.appendChild(card);
+            }
+
+            // Add Crystal Tree
+            if (result.bhagyank_tree) {
+                const tree = result.bhagyank_tree;
+                const benefits = tree.benefits ? tree.benefits.join(', ') : tree.description;
+                const card = createProductCard(
+                    tree.imageLink,
+                    tree.crystalTree + ' Crystal Tree',
+                    benefits,
+                    'Special Price',
+                    tree.productLink
+                );
+                container.appendChild(card);
+            }
+        }
+
+        function createProductCard(imageUrl, title, description, price, link) {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+                <img src="${imageUrl}" alt="${title}" class="product-image" onerror="this.style.display='none'">
+                <div class="product-info">
+                    <h3 class="product-title">${title}</h3>
+                    <p class="product-description">${description}</p>
+                    <div class="product-price">${price}</div>
+                    <a href="${link}" target="_blank" class="buy-button">Buy Now →</a>
+                </div>
+            `;
+            return card;
+        }
+
+        function updateLoshuGrid(gridData) {
+            const grid = gridData.grid;
+            const cells = document.querySelectorAll('#loshuGrid .grid-cell');
+
+            // Lo-Shu grid configuration with descriptions and colors
+            const loshuConfig = [
+                { num: 4, desc: 'Money &\nProperty', color: 'purple' },
+                { num: 9, desc: 'Reputation &\nFame', color: 'pink' },
+                { num: 2, desc: 'Marriage &\nRelationship', color: 'pink' },
+                { num: 3, desc: 'Health &\nFamily', color: 'purple' },
+                { num: 5, desc: 'Energy &\nStability', color: 'orange' },
+                { num: 7, desc: 'Children &\nCreativity', color: 'teal' },
+                { num: 8, desc: 'Knowledge &\nIntuition', color: 'blue' },
+                { num: 1, desc: 'Career &\nSuccess', color: 'pink' },
+                { num: 6, desc: 'Friends &\nBeginnings', color: 'teal' }
+            ];
+
+            // Build the repeated number strings
+            const numberStrings = {};
+
+            // Initialize all as empty
+            loshuConfig.forEach(config => {
+                numberStrings[config.num] = '';
+            });
+
+            // Build repeated strings from grid data
+            for (let row = 0; row < 3; row++) {
+                for (let col = 0; col < 3; col++) {
+                    if (grid[row][col]) {
+                        const cellValue = grid[row][col].toString();
+                        for (let char of cellValue) {
+                            const num = parseInt(char);
+                            if (numberStrings.hasOwnProperty(num)) {
+                                numberStrings[num] += num;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Update each cell
+            loshuConfig.forEach((config, index) => {
+                const cell = cells[index];
+                const numberString = numberStrings[config.num];
+
+                // Clear previous classes
+                cell.className = 'grid-cell';
+
+                // Set content based on frequency
+                if (numberString.length > 0) {
+                    cell.classList.add(config.color);
+                    cell.innerHTML = `
+                        <div class="number">${numberString}</div>
+                        <div class="description">${config.desc}</div>
+                    `;
+
+                    // Adjust font size for longer numbers
+                    if (numberString.length > 2) {
+                        cell.querySelector('.number').style.fontSize = '1.8em';
+                    }
+                    if (numberString.length > 3) {
+                        cell.querySelector('.number').style.fontSize = '1.5em';
+                    }
+                } else {
+                    cell.classList.add('inactive');
+                    cell.innerHTML = `
+                        <div class="number">${config.num}</div>
+                        <div class="description">${config.desc}</div>
+                    `;
+                }
+            });
+        }
+
+        function updatePredictiveGrid(gridData) {
+            const grid = gridData.grid;
+            const cells = document.querySelectorAll('#predictiveGrid .grid-cell');
+
+            // Predictive grid configuration
+            const predictiveConfig = [
+                { num: 3, desc: 'Expression &\nCreativity', color: 'purple' },
+                { num: 1, desc: 'Leadership &\nIndependence', color: 'pink' },
+                { num: 9, desc: 'Wisdom &\nHumanity', color: 'orange' },
+                { num: 6, desc: 'Nurturing &\nResponsibility', color: 'blue' },
+                { num: 7, desc: 'Spirituality &\nIntrospection', color: 'green' },
+                { num: 5, desc: 'Freedom &\nAdventure', color: 'teal' },
+                { num: 2, desc: 'Cooperation &\nBalance', color: 'purple' },
+                { num: 8, desc: 'Authority &\nMaterial', color: 'pink' },
+                { num: 4, desc: 'Stability &\nProcess', color: 'orange' }
+            ];
+
+            // Build the repeated number strings
+            const numberStrings = {};
+
+            // Initialize all as empty
+            predictiveConfig.forEach(config => {
+                numberStrings[config.num] = '';
+            });
+
+            // Build repeated strings from grid data
+            for (let row = 0; row < 3; row++) {
+                for (let col = 0; col < 3; col++) {
+                    if (grid[row][col]) {
+                        const cellValue = grid[row][col].toString();
+                        for (let char of cellValue) {
+                            const num = parseInt(char);
+                            if (numberStrings.hasOwnProperty(num)) {
+                                numberStrings[num] += num;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Update each cell
+            predictiveConfig.forEach((config, index) => {
+                const cell = cells[index];
+                const numberString = numberStrings[config.num];
+
+                // Clear previous classes
+                cell.className = 'grid-cell';
+
+                // Set content based on frequency
+                if (numberString.length > 0) {
+                    cell.classList.add(config.color);
+                    cell.innerHTML = `
+                        <div class="number">${numberString}</div>
+                        <div class="description">${config.desc}</div>
+                    `;
+
+                    // Adjust font size for longer numbers
+                    if (numberString.length > 2) {
+                        cell.querySelector('.number').style.fontSize = '1.8em';
+                    }
+                } else {
+                    cell.classList.add('inactive');
+                    cell.innerHTML = `
+                        <div class="number">${config.num}</div>
+                        <div class="description">${config.desc}</div>
+                    `;
+                }
+            });
+        }
+
+        function updatePlaneStrengths(type, planeData) {
+            const planeList = type === 'loshu' ?
+                document.querySelector('#loshuPlanes') :
+                document.querySelector('#predictivePlanes');
+
+            planeList.innerHTML = '';
+
+            for (const [plane, strength] of Object.entries(planeData)) {
+                const planeItem = document.createElement('div');
+                planeItem.className = 'plane-item';
+                planeItem.innerHTML = `
+                    <span class="plane-name">${plane}</span>
+                    <span class="plane-value">${strength}</span>
+                `;
+                planeList.appendChild(planeItem);
+            }
+        }
+
+        // Add parallax effect to numbers on mouse move
+        document.addEventListener('mousemove', (e) => {
+            const parallaxElements = document.querySelectorAll('.parallax-number');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+
+            parallaxElements.forEach(el => {
+                const moveX = (x - 0.5) * 10;
+                const moveY = (y - 0.5) * 10;
+                el.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+        });
+    </script>
+</body>
+
+</html>
